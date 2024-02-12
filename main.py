@@ -1,20 +1,45 @@
 matrix = [['e'],['B'],['G'],['D'],['A'],['E']]
 
+# Maps the fretNumber with their note, each dictionary is representing a guitar string and the number is the fretNumber
+fretNoteMapping = [{},{},{0:"G3",1:"Ab3",2:"A3",3:"Bb3"},{},{},{}]
+
+# Maps the strings notes with their frequencies in Hz using a list of dictionaries
+noteMapping = [{"E4":329.63},{},{"G3":196,"Ab3":207.65,"A3":220,"Bb3":233.08},{},{},{}]
+
+def getNoteFrequency(noteString, noteFretNumb):
+    note = fretNoteMapping[noteString-1][noteFretNumb]
+    noteFreq = noteMapping[noteString-1][note]
+    return noteFreq
+
+def comparesFrequency(voiceFrequency, noteFrequency):
+    # Tolerance of frequency discrepancy 
+    tolerance = 6.5
+
+    if (voiceFrequency > noteFrequency - tolerance) and (voiceFrequency < noteFrequency + tolerance):
+        print("You hit the note!")
+    elif voiceFrequency > noteFrequency:
+        print("Too High")
+    else:
+        print("Too Low")
+
 import guitarpro
 song = guitarpro.parse('Nirvana.gp4')
 track = song.tracks[0]
-measure = track.measures[0];
-voice = measure.voices[0];
-for beat in voice.beats:
-    for note in beat.notes:
-        matrix[note.string-1].append(note.value)
-print(matrix)
-'''
-for measure in track.measures:
-    for voice in measure.voices:
-        for beat in voice.beats:
-            for note in beat.notes:
-                print()
+measure = track.measures[1]
+for voice in measure.voices:
+    for beat in voice.beats:
+        for note in beat.notes: 
+            matrix[note.string-1].append(note.value)
+            noteFreq = getNoteFrequency(note.string, note.value)
+            comparesFrequency(220, noteFreq)
+
+
+
+'''   
+for string in matrix:
+    for char in string:
+        print(char, end='')
+    print()
 
 import tkinter as tk
 
@@ -29,6 +54,10 @@ label.pack()
 # Add a label widget
 label = tk.Label(root, text=song.artist)
 label.pack()
+root.geometry("500x200")
+# Add a label widget
+#label = tk.Label(root, background="blue", borderwidth=1080)
+#label.pack()
 
 # Run the event loop
 root.mainloop()
