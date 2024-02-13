@@ -8,7 +8,7 @@
 # Examples:
 #    $ ./python/demos/demo_pyaudio.py
 #    $ ./python/demos/demo_pyaudio.py /tmp/recording.wav
-
+import main
 import pyaudio
 import sys
 import numpy as np
@@ -57,7 +57,9 @@ while True:
 
         confidence = pitch_o.get_confidence()
 
-        print("{} / {}".format(pitch,confidence))
+        #print("{} / {}".format(pitch,confidence))
+        if pitch != 0:
+            main.singSong(pitch)
 
         if outputsink:
             outputsink(signal, len(signal))

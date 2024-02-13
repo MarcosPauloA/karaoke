@@ -14,24 +14,27 @@ def getNoteFrequency(noteString, noteFretNumb):
 def comparesFrequency(voiceFrequency, noteFrequency):
     # Tolerance of frequency discrepancy 
     tolerance = 6.5
-
+    
     if (voiceFrequency > noteFrequency - tolerance) and (voiceFrequency < noteFrequency + tolerance):
         print("You hit the note!")
     elif voiceFrequency > noteFrequency:
         print("Too High")
+        print("You're Freq: ", voiceFrequency, " Note Freq: ", noteFrequency)
     else:
         print("Too Low")
+        print("You're Freq: ", voiceFrequency, " Note Freq: ", noteFrequency)
 
-import guitarpro
-song = guitarpro.parse('Nirvana.gp4')
-track = song.tracks[0]
-measure = track.measures[1]
-for voice in measure.voices:
-    for beat in voice.beats:
-        for note in beat.notes: 
-            matrix[note.string-1].append(note.value)
-            noteFreq = getNoteFrequency(note.string, note.value)
-            comparesFrequency(220, noteFreq)
+def singSong(pitch):
+    import guitarpro
+    song = guitarpro.parse('Nirvana.gp4')
+    track = song.tracks[0]
+    measure = track.measures[1]
+    for voice in measure.voices:
+        for beat in voice.beats:
+            for note in beat.notes: 
+                matrix[note.string-1].append(note.value)
+                noteFreq = getNoteFrequency(note.string, note.value)
+                comparesFrequency(pitch, noteFreq)
 
 
 
