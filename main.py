@@ -23,9 +23,8 @@ def comparesFrequency(voiceFrequency, noteFrequency):
     else:
         print("Too Low")
         print("You're Freq: ", voiceFrequency, " Note Freq: ", noteFrequency)
-
+import guitarpro
 def singSong(pitch):
-    import guitarpro
     song = guitarpro.parse('Nirvana.gp4')
     track = song.tracks[0]
     measure = track.measures[1]
@@ -35,6 +34,7 @@ def singSong(pitch):
                 matrix[note.string-1].append(note.value)
                 noteFreq = getNoteFrequency(note.string, note.value)
                 comparesFrequency(pitch, noteFreq)
+                return noteFreq
 
 
 

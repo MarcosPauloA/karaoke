@@ -13,6 +13,13 @@ import pyaudio
 import sys
 import numpy as np
 import aubio
+import threading
+import userInterface
+def showUserInterface():
+    userInterface.startLoop();
+
+#my_thread = threading.Thread(target=showUserInterface)
+#my_thread.start()  # Start the thread
 
 # initialise pyaudio
 p = pyaudio.PyAudio()
@@ -52,14 +59,15 @@ print("*** starting recording")
 while True:
     try:
         audiobuffer = stream.read(buffer_size)
-        signal = np.fromstring(audiobuffer, dtype=np.float32)
+        signal = np.frombuffer(audiobuffer, dtype=np.float32) # Changed np.fromstring to frombuffer, seems to work as well 
         pitch = pitch_o(signal)[0]
 
         confidence = pitch_o.get_confidence()
 
         #print("{} / {}".format(pitch,confidence))
         if pitch != 0:
-            main.singSong(pitch)
+            noteFreq = main.singSong(pitch)
+            userInterface.moveImage(pitch, noteFreq)
 
         if outputsink:
             outputsink(signal, len(signal))
